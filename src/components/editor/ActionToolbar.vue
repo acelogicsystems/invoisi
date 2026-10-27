@@ -10,10 +10,29 @@ const store = useInvoiceStore();
 const openWhatsApp = () => {
   window.open(store.whatsappShareUrl, '_blank');
 };
+
+const handleNewInvoice = () => {
+  if (confirm(`Start a new invoice? This will save your business profile, advance to ${store.invoice.invoiceNumber ? 'the next invoice number' : 'INV-002'}, and clear current items.`)) {
+    store.createNewInvoice();
+  }
+};
 </script>
 
 <template>
   <div class="flex items-center gap-2">
+    <!-- New Invoice Auto-Increment Button -->
+    <button
+      @click="handleNewInvoice"
+      type="button"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-700 transition cursor-pointer"
+      title="Create next invoice and preserve your business settings"
+    >
+      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      <span>New Invoice</span>
+    </button>
+
     <!-- WhatsApp Share Button -->
     <button
       @click="openWhatsApp"

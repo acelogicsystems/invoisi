@@ -59,3 +59,28 @@ export function fileToBase64(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
+/**
+ * Auto-increments alphanumeric invoice numbers (e.g. INV-001 -> INV-002, BILL-99 -> BILL-100)
+ */
+export function incrementInvoiceNumber(current: string): string {
+  if (!current || !current.trim()) {
+    return 'INV-001';
+  }
+
+  // Find the last sequence of digits in the string
+  const match = current.match(/^(.*?)(\d+)$/);
+
+  if (!match) {
+    // If no trailing numbers exist, append -001
+    return `${current.trim()}-002`;
+  }
+
+  const prefix = match[1];
+  const digits = match[2];
+  const nextNum = parseInt(digits, 10) + 1;
+
+  // Preserve leading zeros (e.g., '001' -> '002', '099' -> '100')
+  const paddedNextNum = String(nextNum).padStart(digits.length, '0');
+
+  return `${prefix}${paddedNextNum}`;
+}

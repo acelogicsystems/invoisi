@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import type { InvoiceState, PaymentMethodType } from '@/types/invoice';
-import { formatCurrency, normalizeKenyanPhone } from '@/utils/formatters';
+import { formatCurrency, normalizeKenyanPhone , incrementInvoiceNumber} from '@/utils/formatters';
 
 const DEFAULT_INVOICE: InvoiceState = {
   id: 'draft-01',
@@ -160,6 +160,40 @@ export const useInvoiceStore = defineStore(
     function resetInvoice() {
       invoice.value = structuredClone(DEFAULT_INVOICE);
     }
+    function createNewInvoice() {
+      // 1. Compute next sequential invoice number
+      const nextInvoiceNumber = incrementInvoiceNumber(invoice.value.invoiceNumber);
+
+      // 2. Set fresh issue and due dates
+      const now = new Date();
+      const issueDate = now.toISOString().slice(0, 10);
+      const dueDate = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+      // 3. Clear client fields while retaining sender profile & payment details
+      invoice.value.invoiceNumber = nextInvoiceNumber;
+      invoice.value.issueDate = issueDate;
+      invoice.value.dueDate = dueDate;
+
+      invoice.value.client = {
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        city: '',
+        kraPin: '',
+      };
+
+      // 4. Reset line items to a single fresh row
+      invoice.value.items = [
+        {
+          id: crypto.randomUUID(),
+          description: '',
+          quantity: 1,
+          unitPrice: 0,
+          discountRate: 0,
+        },
+      ];
+    }
 
     return {
       invoice,
@@ -175,6 +209,7 @@ export const useInvoiceStore = defineStore(
       setLogo,
       removeLogo,
       resetInvoice,
+      createNewInvoice,
     };
   },
   {
