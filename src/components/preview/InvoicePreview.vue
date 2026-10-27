@@ -6,7 +6,10 @@ const store = useInvoiceStore();
 </script>
 
 <template>
-  <div class="a4-sheet w-full max-w-[210mm] min-h-[297mm] bg-white text-slate-900 p-8 sm:p-12 shadow-2xl rounded-sm border border-slate-200 flex flex-col justify-between">
+  <div
+    id="invoice-capture-area"
+    class="a4-sheet w-full max-w-[210mm] min-h-[297mm] bg-white text-slate-900 p-8 sm:p-12 shadow-2xl rounded-sm border border-slate-200 flex flex-col justify-between"
+  >
     <div>
       <!-- Header: Branding & Meta -->
       <div class="flex justify-between items-start border-b border-slate-200 pb-8">
