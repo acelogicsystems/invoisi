@@ -6,6 +6,7 @@ import LineItemsSection from '@/components/editor/LineItemsSection.vue';
 import TaxPaymentSection from '@/components/editor/TaxPaymentSection.vue';
 import ActionToolbar from '@/components/editor/ActionToolbar.vue';
 import InvoicePreview from '@/components/preview/InvoicePreview.vue';
+import CurrencySwitcher from './components/editor/CurrencySwitcher.vue';
 
 const activeMobileTab = ref<'editor' | 'preview'>('editor');
 
@@ -26,6 +27,11 @@ const handlePrint = () => {
           <h1 class="text-sm font-semibold tracking-wide text-white">Invoisi<span class="text-emerald-400">.ke</span></h1>
           <p class="text-[11px] text-slate-400">Kenyan Freelance & SME Invoice Studio</p>
         </div>
+      </div>
+
+      <!-- Currency Switcher Pill Container -->
+      <div class="hidden sm:flex items-center">
+        <CurrencySwitcher />
       </div>
 
       <div class="flex items-center gap-3">
@@ -52,6 +58,7 @@ const handlePrint = () => {
         <ActionToolbar @trigger-print="handlePrint" />
       </div>
     </header>
+   
 
     <!-- Split-Screen Body -->
     <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">

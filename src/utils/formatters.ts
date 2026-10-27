@@ -4,14 +4,22 @@ import type { CurrencyCode } from '@/types/invoice';
  * Format numeric currency values using localized formatting
  */
 export function formatCurrency(amount: number, currency: CurrencyCode = 'KES'): string {
-  return new Intl.NumberFormat('en-KE', {
+  const localeMap: Record<CurrencyCode, string> = {
+    KES: 'en-KE',
+    USD: 'en-US',
+    EUR: 'de-DE',
+    GBP: 'en-GB',
+  };
+
+  const locale = localeMap[currency] || 'en-KE';
+
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount || 0);
 }
-
 /**
  * Convert any Kenyan phone input (07..., 01..., +254...) into a clean WhatsApp-compatible E.164 number (2547... or 2541...)
  */
